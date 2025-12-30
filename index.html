@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Advanced Video Player</title>
+  <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+  <style>
+    body { background: #000; margin: 0; display: flex; align-items: center; height: 100vh; }
+    .container { width: 100%; max-width: 900px; margin: auto; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <video id="player" playsinline controls data-poster="https://via.placeholder.com/1920x1080/000/fff?text=Loading+Media...">
+    <source src="https://tvsen1.aynaott.com/YNMn5kZz8aLm/index.m3u8" type="application/x-mpegURL">
+  </video>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const video = document.querySelector('video');
+    const source = video.getElementsByTagName('source')[0].src;
+    
+    // HLS Support setup
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(source);
+      hls.attachMedia(video);
+      window.hls = hls;
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      // Safari වැනි browser සඳහා
+      video.src = source;
+    }
+    
+    // Initialize Plyr
+    const player = new Plyr(video, {
+      captions: { active: true, update: true, language: 'en' }
+    });
+  });
+</script>
+</body>
+</html>
